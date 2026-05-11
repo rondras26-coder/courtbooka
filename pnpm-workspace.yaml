@@ -1,0 +1,4 @@
+# pnpm 11+ records approved dependency install scripts here (see README).
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
