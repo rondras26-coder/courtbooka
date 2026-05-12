@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-import { signOut } from "./actions";
 import { BookSlotForm } from "./book-slot-form";
 
 const timeFmt = new Intl.DateTimeFormat("de-DE", {
@@ -92,35 +91,12 @@ export default async function BookPage() {
 
   return (
     <div className="flex flex-1 flex-col px-6 py-10 md:mx-auto md:max-w-3xl md:py-14">
-      <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Book a court</h1>
-          <p className="text-muted-foreground mt-1 text-sm">
-            Vertical slice: browse available slots, sign in, confirm a booking
-            under RLS.
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {user ? (
-            <>
-              <span className="text-muted-foreground max-w-[14rem] truncate text-xs">
-                {user.email ?? user.id}
-              </span>
-              <form action={signOut}>
-                <Button type="submit" variant="outline" size="sm">
-                  Sign out
-                </Button>
-              </form>
-            </>
-          ) : (
-            <Button asChild size="sm">
-              <Link href="/login?next=%2Fbook">Sign in</Link>
-            </Button>
-          )}
-          <Button asChild variant="ghost" size="sm">
-            <Link href="/">Home</Link>
-          </Button>
-        </div>
+      <header className="mb-10 space-y-1">
+        <h1 className="text-2xl font-semibold tracking-tight">Book a court</h1>
+        <p className="text-muted-foreground text-sm">
+          Browse available slots, sign in from the header, and confirm a booking
+          under RLS.
+        </p>
       </header>
 
       {slotsError ? (

@@ -38,10 +38,3 @@ export async function bookSlot(
   revalidatePath("/book");
   return { ok: true };
 }
-
-export async function signOut() {
-  const supabase = await createSupabaseServerClient();
-  await supabase.auth.signOut();
-  revalidatePath("/book");
-  redirect("/book");
-}
