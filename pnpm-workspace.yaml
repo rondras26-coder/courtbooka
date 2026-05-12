@@ -1,3 +1,7 @@
+# Root package is also the workspace package (pnpm requires `packages` to be non-empty).
+packages:
+  - "."
+
 # pnpm 11+ records approved dependency install scripts here (see README).
 allowBuilds:
   sharp: true
