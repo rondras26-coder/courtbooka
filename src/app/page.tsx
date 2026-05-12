@@ -20,10 +20,14 @@ export default function Home() {
         </div>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Button asChild>
-            <a href="https://nextjs.org/docs">Next.js docs</a>
+            <a href="https://nextjs.org/docs" rel="noopener noreferrer">
+              Next.js docs
+            </a>
           </Button>
           <Button variant="outline" asChild>
-            <a href="https://ui.shadcn.com/docs">shadcn/ui</a>
+            <a href="https://ui.shadcn.com/docs" rel="noopener noreferrer">
+              shadcn/ui
+            </a>
           </Button>
         </div>
       </main>
