@@ -12,7 +12,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "smoke:magic-link": "node ./scripts/smoke-magic-link.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",

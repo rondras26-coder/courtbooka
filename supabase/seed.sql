@@ -18,20 +18,34 @@ where v.slug = 'demo-hub'
       and c.label = 'Court 1'
   );
 
+-- Deterministic “tomorrow 10:00–11:30” in venue timezone for idempotent re-runs.
 insert into public.court_slots (court_id, starts_at, ends_at, status)
 select c.id,
-  now() + interval '1 day',
-  now() + interval '1 day' + interval '90 minutes',
+  t.starts_at,
+  t.ends_at,
   'available'
 from public.courts c
   join public.venues v on v.id = c.venue_id
+  cross join lateral (
+    select
+      (
+        (now() at time zone v.timezone)::date
+        + interval '1 day'
+        + interval '10 hours'
+      ) at time zone v.timezone as starts_at,
+      (
+        (now() at time zone v.timezone)::date
+        + interval '1 day'
+        + interval '11 hours 30 minutes'
+      ) at time zone v.timezone as ends_at
+  ) t
 where v.slug = 'demo-hub'
   and c.label = 'Court 1'
   and not exists (
     select 1
     from public.court_slots s
     where s.court_id = c.id
-      and s.starts_at = now() + interval '1 day'
+      and s.starts_at = t.starts_at
   );
 
 -- Example booking (requires an existing auth user UUID):
