@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Courtbooka",
   description:
-    "Courtbooka — broker workspace baseline (Next.js, TypeScript, Tailwind, shadcn/ui).",
+    "Courtbooka — technical bootstrap (Next.js App Router, TypeScript, Tailwind, shadcn/ui).",
 };
 
 export default function RootLayout({
@@ -25,8 +25,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="de"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang="en"
+      className={`dark ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
