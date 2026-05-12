@@ -3,6 +3,7 @@ import { BookOpen } from "lucide-react";
 
 import { HeaderAuth } from "@/components/app-shell/header-auth";
 import { MainNav } from "@/components/app-shell/main-nav";
+import { MobileNav } from "@/components/app-shell/mobile-nav";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -35,8 +36,13 @@ export async function SiteHeader() {
           </span>
           <span className="hidden sm:inline">Courtbooka</span>
         </Link>
-        <MainNav />
-        <div className="ml-auto flex min-w-0 items-center justify-end">
+        <div className="hidden sm:flex sm:flex-1 sm:justify-center">
+          <MainNav />
+        </div>
+        <div className="ml-auto flex min-w-0 items-center justify-end gap-1">
+          <div className="sm:hidden">
+            <MobileNav />
+          </div>
           <HeaderAuth user={user} />
         </div>
       </div>

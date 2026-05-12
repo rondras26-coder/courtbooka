@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-6 py-16">
-      <main className="flex max-w-lg flex-col items-center gap-8 text-center">
+      <div className="flex max-w-lg flex-col items-center gap-8 text-center">
         <div className="flex size-14 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
           <BookOpen className="size-7" aria-hidden />
         </div>
@@ -31,7 +31,7 @@ export default function Home() {
             </a>
           </Button>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
