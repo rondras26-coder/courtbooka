@@ -40,3 +40,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local UX review / screenshot captures (not product assets)
+.ux-review/
+
+# Supabase CLI ephemeral files
+supabase/.temp/
