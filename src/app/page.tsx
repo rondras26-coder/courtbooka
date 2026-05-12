@@ -20,13 +20,14 @@ export default function Home() {
         </div>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Button asChild>
-            <a href="https://nextjs.org/docs" rel="noopener noreferrer">
-              Next.js docs
-            </a>
+            <a href="/book">Book a court</a>
+          </Button>
+          <Button variant="secondary" asChild>
+            <a href="/login">Sign in</a>
           </Button>
           <Button variant="outline" asChild>
-            <a href="https://ui.shadcn.com/docs" rel="noopener noreferrer">
-              shadcn/ui
+            <a href="https://nextjs.org/docs" rel="noopener noreferrer">
+              Next.js docs
             </a>
           </Button>
         </div>

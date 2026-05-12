@@ -25,7 +25,7 @@ pnpm approve-builds --all && pnpm install
 | `pnpm start` | Run production server locally |
 | `pnpm lint` | ESLint (baseline verification for this milestone) |
 
-After `pnpm dev`, open [http://localhost:3000](http://localhost:3000).
+After `pnpm dev`, open [http://localhost:3000](http://localhost:3000). **Booking slice:** `/book` lists available slots; `/login` sends an email magic link; successful auth lands on `/auth/callback` then redirects into `/book`.
 
 ## Configuration layout
 
@@ -58,16 +58,15 @@ Courtbooka targets **Supabase Postgres** ([RONA-1048](/RONA/issues/RONA-1048)).
 
 ### Row Level Security
 
-All booking tables ship with **RLS enabled and no policies** (deny-by-default over PostgREST). The service role bypasses RLS for migrations and trusted server tasks only.
+Booking tables use **RLS with explicit policies** (see `supabase/migrations/20260512170000_booking_rls_policies.sql`):
 
-When auth UI lands, add explicit policies instead of widening defaults — for example:
+- **venues / courts / court_slots** — `SELECT` for `anon` and `authenticated` so the catalog and grid load through the anon key before sign-in.
+- **bookings** — `SELECT` and `INSERT` for `authenticated` only, scoped to `auth.uid() = user_id`.
+- **Triggers** — `BEFORE INSERT` locks the slot row (`FOR UPDATE`), ensures `status = 'available'`, and checks `user_id` matches the JWT when present. `AFTER INSERT` sets the slot to `booked` via a **SECURITY DEFINER** function so the session role does not need `UPDATE` on `court_slots`.
 
-```sql
--- Example only — do not run until requirements are clear
--- create policy "bookings_select_own"
---   on public.bookings for select to authenticated
---   using (auth.uid() = user_id);
-```
+Direct SQL seeds that run without a JWT still skip the `user_id` / `auth.uid()` equality check (superuser / project SQL editor only). Prefer app sign-up + magic link for real bookings.
+
+Add **`/auth/callback`** (and your production origin, e.g. `https://app.example.com/auth/callback`) under **Authentication → URL configuration → Redirect URLs** in the Supabase dashboard so magic links return to the Next.js route handler.
 
 ### Persistence smoke check
 
