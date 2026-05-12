@@ -40,8 +40,38 @@ After `pnpm dev`, open [http://localhost:3000](http://localhost:3000).
 | `src/app/globals.css` | Tailwind import + theme CSS variables |
 | `src/components/ui/` | shadcn-generated components (e.g. `button`) |
 | `src/lib/utils.ts` | `cn()` helper for class merging |
+| `src/lib/supabase/` | `@supabase/ssr` browser + server clients; service-role helper |
+| `supabase/migrations/` | Ordered Postgres migrations for Supabase |
+| `.env.example` | Safe env template — copy to `.env.local` |
 
-Environment-specific secrets belong in `.env.local` (not committed). None are required for this bootstrap.
+Environment-specific secrets belong in `.env.local` (not committed). For UI-only smoke you can omit Supabase vars; middleware skips auth refresh until URL + anon/publishable key are present.
+
+## Database (Supabase)
+
+Courtbooka targets **Supabase Postgres** ([RONA-1048](/RONA/issues/RONA-1048)).
+
+1. Copy `.env.example` → `.env.local` and fill `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`). Optionally add `SUPABASE_SERVICE_ROLE_KEY` **only on the server** for admin/read-back tooling — never expose it via `NEXT_PUBLIC_*`.
+2. Apply migrations in filename order (`supabase/migrations/`). Options:
+   - Supabase Dashboard → SQL → paste each migration file; or
+   - Supabase CLI linked to your project: `supabase db push` (see [CLI docs](https://supabase.com/docs/guides/cli)).
+3. Seed demo rows (venue → court → slot): run `supabase/seed.sql` in the SQL editor. Inserts into `bookings` require an existing `auth.users` row — uncomment the sample block in that file once you have a user UUID.
+
+### Row Level Security
+
+All booking tables ship with **RLS enabled and no policies** (deny-by-default over PostgREST). The service role bypasses RLS for migrations and trusted server tasks only.
+
+When auth UI lands, add explicit policies instead of widening defaults — for example:
+
+```sql
+-- Example only — do not run until requirements are clear
+-- create policy "bookings_select_own"
+--   on public.bookings for select to authenticated
+--   using (auth.uid() = user_id);
+```
+
+### Persistence smoke check
+
+With migrations + seed applied and `SUPABASE_SERVICE_ROLE_KEY` set locally, start `pnpm dev` and open `/api/health/supabase`. You should see JSON with `"venueCount"` reflecting seeded venues. Without the service role key the route still reports whether public env vars are configured.
 
 ## Milestone: done means
 
